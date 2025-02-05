@@ -26,7 +26,7 @@ public class Filmes{
         }
 
         public Filmes(DadosFilme dados) {
-                this.id = getId();
+                this.id = dados.id();
 //                this.estaNoPlano = EstaNoPlano.verificarPlano(String.valueOf(dados.genero()));
                 this.nome = dados.nome();
                 this.sinopse = dados.sinopse();

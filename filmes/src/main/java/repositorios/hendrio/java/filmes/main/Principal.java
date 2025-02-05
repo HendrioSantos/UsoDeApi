@@ -40,11 +40,26 @@ public class Principal {
                     buscarFilme();
                     break;
                 case 3:
-                    buscarFilmePorDiretor();
-                    break;
-                case 4:
                     buscarFilmePorAtores();
                     break;
+                case 4:
+                    buscarFilmePorDiretor();
+                    break;
+                case 5:
+                    buscarFilmePorRoteirista();
+                    break;
+                case 6:
+                    listaTodosOsFilmesBuscados();
+                    break;
+                case 7:
+                    buscarFilmePorTipoPlano();
+                    break;
+//                case 8:
+//                    top5SeusFilmes();
+//                    break;
+//                case 9:
+//                    top10SeusFilmes();
+//                    break;
                 case 0:
                     System.out.println("...Saindo Da Aplicação...");
                     break;
@@ -59,13 +74,15 @@ public class Principal {
                 """
                 \n1 - Verificar Se o Filme Existe no Banco de Dados
                 2 - Buscar Filmes
-                2 - Buscar Filmes por Diretor
-                3 - Buscar Filmes por Roteirista
-                4 - Listar Filmes já Buscadas por Você
-                5 - Buscar Filmes por Titulo
-                6 - Buscar Filmes por Ator
-                7 - Top 5 Seus Filmes Buscados
-                8 - Top 10 Seus Filmes Buscados
+                3 - Buscar Filmes por Ator
+                4 - Buscar Filmes por Diretor
+                5 - Buscar Filmes por Roteirista
+                6 - Listar Filmes já Buscadas por Você
+                7 - Buscar Filmes por Ator
+                8 - Top 5 Seus Filmes Buscados
+                9 - Top 10 Seus Filmes Buscados
+                
+                0 - Para Sair da Aplicação;
                 """;
         System.out.println(menu);
     }
@@ -103,22 +120,72 @@ public class Principal {
                     .sorted(Comparator.comparing(Filmes::getAvaliacoes).
                             thenComparing(Filmes::getDuracaoMinutos).
                             thenComparing(Filmes::getGenero))
-                    .forEach(f -> System.out.println(f.getNome() + f.getAvaliacoes()+ f.getDuracaoMinutos() + f.getGenero()));
-        }
+                    .forEach(f -> System.out.println( nomeDiretor +
+                            " trabalhou em: " + f.getNome()
+                            + " Quantidade de Avaliações: " +
+                            f.getAvaliacoes() + " Com duração de: " +
+                            f.getDuracaoMinutos() + " Genêro do Filme: " +
+                            f.getGenero()));}
     }
 
     private void buscarFilmePorAtores(){
         System.out.println("Qual ator deseja? ");
         var nomeAtor = input.nextLine();
-        List<Filmes> atores = iFilmesRepository.findByAtoresIgnoreCase(nomeAtor);
+        List<Filmes> atores = iFilmesRepository.findByAtoresContainingIgnoreCase(nomeAtor);
+        System.out.println("Filmes encontrados: " + atores.size());
         if (atores.isEmpty()) {
             System.out.println("Não há um filme com o ator que tu desejas...");
         } else {
             atores.stream()
-                    .sorted(Comparator.comparing(Filmes::getAvaliacoes).
+                    .sorted(Comparator.comparing(Filmes::getNome).
+                            thenComparing(Filmes::getAvaliacoes).
                             thenComparing(Filmes::getDuracaoMinutos).
                             thenComparing(Filmes::getGenero))
-                    .forEach(f -> System.out.println(f.getNome() + f.getAvaliacoes()+ f.getDuracaoMinutos() + f.getGenero()));
+                    .forEach(f -> System.out.println( nomeAtor +
+                            " trabalhou em: " + f.getNome()
+                            + " Quantidade de Avaliações: " +
+                            f.getAvaliacoes() + " Com duração de: " +
+                            f.getDuracaoMinutos() + " Genêro do Filme: " +
+                            f.getGenero()));
         }
     }
+
+    private void buscarFilmePorRoteirista() {
+        System.out.println("Nome do Roteirista para busca: ");
+        var nomeRoteirista = input.nextLine();
+        List<Filmes> roteirista = iFilmesRepository.findByRoteiristaContainingIgnoreCase(nomeRoteirista);
+        System.out.println("Roteiristas encontrados: " + roteirista.size());
+        roteirista.stream()
+                .sorted(Comparator.comparing(Filmes::getNome).
+                        thenComparing(Filmes::getAvaliacoes)
+                        .thenComparing(Filmes::getDuracaoMinutos)
+                        .thenComparing(Filmes::getGenero))
+                .forEach(f -> System.out.println( nomeRoteirista + " trabalhou em: " + f.getNome()
+                        + " Quantidade de Avaliações: " +
+                        f.getAvaliacoes() + " Com duração de: " +
+                        f.getDuracaoMinutos() + " Genêro do Filme: " +
+                        f.getGenero()));
+    }
+
+    private void listaTodosOsFilmesBuscados() {
+        List<Filmes> todosOsFilmes = iFilmesRepository.findAll();
+        todosOsFilmes.forEach(System.out::println);
+    }
+
+    private void buscarFilmePorTipoPlano() {
+
+    }
+
+//    private void top5SeusFilmes() {
+//        Principal principal = new Principal();
+//        List<Filmes> top5Filmes = iFilmesRepository.findTop5OrderByAvaliacoes(principal.listaTodosOsFilmesBuscados());
+//        top5Filmes.stream()
+//                .forEach(top -> System.out.println(top.getNome() + " avaliação: " + top.getAvaliacoes()));
+//    }
+//
+//    private void top10SeusFilmes() {
+//        List<Filmes> top10Filmes = iFilmesRepository.findTop10OrderByAvaliacoes();
+//        top10Filmes.stream()
+//                .forEach(top -> System.out.println(top.getNome() + " avaliação: " + top.getAvaliacoes()));
+//    }
 }
