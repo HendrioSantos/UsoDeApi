@@ -10,33 +10,33 @@ public class Filmes{
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
-        @Enumerated(EnumType.STRING)
-        private EstaNoPlano estaNoPlano;
+//        @Enumerated(EnumType.STRING);
+//        private EstaNoPlano estaNoPlano;
         private String nome;
         private String sinopse;
-        private int duracaoMinutos;
+        private String duracaoMinutos;
         private String genero;
         private String lancado;
         private String diretor;
         private String atores;
         private String roteirista;
-        private Long avaliacoes;
+        private String avaliacoes;
 
         public Filmes() {
         }
 
         public Filmes(DadosFilme dados) {
                 this.id = getId();
-                this.estaNoPlano = EstaNoPlano.verificarPlano(String.valueOf(getEstaNoPlano()));
-                this.nome = getNome();
-                this.sinopse = getSinopse();
-                this.duracaoMinutos = getDuracaoMinutos();
-                this.genero = getGenero();
-                this.lancado = getLancado();
-                this.diretor = getDiretor();
-                this.atores = getAtores();
-                this.roteirista = getRoteirista();
-                this.avaliacoes = getAvaliacoes();
+//                this.estaNoPlano = EstaNoPlano.verificarPlano(String.valueOf(dados.genero()));
+                this.nome = dados.nome();
+                this.sinopse = dados.sinopse();
+                this.duracaoMinutos = dados.duracaoMinutos();
+                this.genero = dados.genero();
+                this.lancado = dados.lancado();
+                this.diretor = dados.diretor();
+                this.atores = dados.atores();
+                this.roteirista = dados.roteirista();
+                this.avaliacoes = dados.avaliacoes();
         }
 
         public Long getId() {
@@ -47,13 +47,13 @@ public class Filmes{
                 this.id = id;
         }
 
-        public EstaNoPlano getEstaNoPlano() {
-                return estaNoPlano;
-        }
-
-        public void setEstaNoPlano(EstaNoPlano estaNoPlano) {
-                this.estaNoPlano = estaNoPlano;
-        }
+//        public EstaNoPlano getEstaNoPlano() {
+//                return estaNoPlano;
+//        }
+//
+//        public void setEstaNoPlano(EstaNoPlano estaNoPlano) {
+//                this.estaNoPlano = estaNoPlano;
+//        }
 
         public String getNome() {
                 return nome;
@@ -71,11 +71,11 @@ public class Filmes{
                 this.sinopse = sinopse;
         }
 
-        public int getDuracaoMinutos() {
+        public String getDuracaoMinutos() {
                 return duracaoMinutos;
         }
 
-        public void setDuracaoMinutos(int duracaoMinutos) {
+        public void setDuracaoMinutos(String duracaoMinutos) {
                 this.duracaoMinutos = duracaoMinutos;
         }
 
@@ -119,11 +119,11 @@ public class Filmes{
                 this.roteirista = roteirista;
         }
 
-        public Long getAvaliacoes() {
+        public String getAvaliacoes() {
                 return avaliacoes;
         }
 
-        public void setAvaliacoes(Long avaliacoes) {
+        public void setAvaliacoes(String avaliacoes) {
                 this.avaliacoes = avaliacoes;
         }
 
@@ -131,7 +131,7 @@ public class Filmes{
         public String toString() {
                 return "Filmes{" +
                         "id=" + id +
-                        ", estaNoPlano=" + estaNoPlano +
+//                        ", estaNoPlano=" + estaNoPlano +
                         ", nome='" + nome + '\'' +
                         ", sinopse='" + sinopse + '\'' +
                         ", duracaoMinutos=" + duracaoMinutos +

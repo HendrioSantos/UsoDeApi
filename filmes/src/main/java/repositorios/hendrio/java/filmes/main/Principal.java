@@ -27,7 +27,7 @@ public class Principal {
 
     public void exibeMenu() {
         int opcao = -1;
-        while (opcao != 0){
+        while (opcao != 0) {
             mostrarMenu();
             opcao = input.nextInt();
             input.nextLine();
@@ -43,6 +43,7 @@ public class Principal {
                     buscarFilmePorDiretor();
                     break;
                 case 4:
+                    buscarFilmePorAtores();
                     break;
                 case 0:
                     System.out.println("...Saindo Da Aplicação...");
@@ -53,13 +54,13 @@ public class Principal {
         }
     }
 
-    public void mostrarMenu(){
+    public void mostrarMenu() {
         String menu =
                 """
-                1 - Verificar Se o Filme Existe no Banco de Dados
+                \n1 - Verificar Se o Filme Existe no Banco de Dados
                 2 - Buscar Filmes
                 2 - Buscar Filmes por Diretor
-                3 - Buscar FIlmes por Roteirista
+                3 - Buscar Filmes por Roteirista
                 4 - Listar Filmes já Buscadas por Você
                 5 - Buscar Filmes por Titulo
                 6 - Buscar Filmes por Ator
@@ -69,19 +70,21 @@ public class Principal {
         System.out.println(menu);
     }
 
-    public DadosFilme verificarFilme(){
+    public DadosFilme verificarFilme() {
         System.out.println("Digite um filme para a busca: ");
         var filmeBuscado = input.nextLine().replace(" ", "+");
         System.out.println(filmeBuscado);
+//        var tipoDePlano = input.nextLine();
+//        EstaNoPlano estaNoPlano = EstaNoPlano.verificarPlano(tipoDePlano);
         var json = DOMINIO + API_KEY + filmeBuscado;
         System.out.println(json);
-        var dadosFilme = consumoApi.obterDados(json, Filmes.class);
+        var dadosFilme = consumoApi.obterDados(json);
         DadosFilme dadosJsonFilme = converteDados.obterDados(dadosFilme, DadosFilme.class);
         System.out.println(dadosFilme);
         return dadosJsonFilme;
     }
 
-    public void buscarFilme(){
+    public void buscarFilme() {
         DadosFilme dados = verificarFilme();
         Filmes filmes = new Filmes(dados);
         iFilmesRepository.save(filmes);
@@ -108,7 +111,14 @@ public class Principal {
         System.out.println("Qual ator deseja? ");
         var nomeAtor = input.nextLine();
         List<Filmes> atores = iFilmesRepository.findByAtoresIgnoreCase(nomeAtor);
-
+        if (atores.isEmpty()) {
+            System.out.println("Não há um filme com o ator que tu desejas...");
+        } else {
+            atores.stream()
+                    .sorted(Comparator.comparing(Filmes::getAvaliacoes).
+                            thenComparing(Filmes::getDuracaoMinutos).
+                            thenComparing(Filmes::getGenero))
+                    .forEach(f -> System.out.println(f.getNome() + f.getAvaliacoes()+ f.getDuracaoMinutos() + f.getGenero()));
+        }
     }
-
 }

@@ -1,10 +1,12 @@
 package repositorios.hendrio.java.filmes.model;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.List;
 
-public record DadosPontuacao(
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record DadosPontuacao (
         @JsonAlias("Ratings")
         List<DadosVotacao> votacao,
         @JsonAlias("imdbRating")
